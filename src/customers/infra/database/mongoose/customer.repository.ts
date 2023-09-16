@@ -30,8 +30,14 @@ export class CustomerRepository implements ICustomerRepository {
         return new Customer(customerUpdated as Customer);
     }
 
-    delete(id: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async delete(id: string): Promise<void> {
+        const customer = await model.findOneAndDelete<Customer>(
+            { id },
+        ).exec();
+
+        if (!customer) {
+            throw new CustomerNotException();
+        }
     }
 
     async find(id: string): Promise<Customer | null> {
