@@ -7,7 +7,7 @@ export interface ICustomerRepository {
 
     delete(id: string): Promise<void>;
 
-    find(id: string): Promise<void>;
+    find(id: string): Promise<Customer | null>;
 
     findAll(id: string): Promise<Customer[]>;
 }

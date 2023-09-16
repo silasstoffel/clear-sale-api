@@ -20,8 +20,9 @@ export class CustomerRepository implements ICustomerRepository {
         throw new Error('Method not implemented.');
     }
 
-    find(id: string): Promise<void> {
-        throw new Error('Method not implemented.');
+    async find(id: string): Promise<Customer | null> {
+        const customer = await model.findOne({ id });
+        return customer ? new Customer(customer) : null;
     }
 
     findAll(id: string): Promise<Customer[]> {

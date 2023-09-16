@@ -9,7 +9,7 @@ const addressSchema = new Schema<Address>({
     state: { type: String, required: true },
     postalCode: { type: String, required: false },
     country: { type: String, required: false }
-});
+}, { _id: false, timestamps: false  });
 
 const customerSchema = new Schema<Customer & Document>({
     _id: { type: SchemaTypes.ObjectId, auto: true },
