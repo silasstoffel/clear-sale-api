@@ -1,0 +1,14 @@
+# VS Code
+.vscode
+.volumes
+
+# Auto-generated
+node_modules
+coverage
+build
+
+# Environment
+.env
+
+# MISC
+.DS_Store
