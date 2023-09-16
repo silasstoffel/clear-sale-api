@@ -53,8 +53,6 @@ export class CustomerRepository implements ICustomerRepository {
             .skip(skip)
             .limit(limit + 1)
             .exec();
-
-        console.log(params);
         
         const next = records.length > limit ? page + 1 : null;
   
