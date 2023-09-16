@@ -1,7 +1,7 @@
 import { injectable, } from 'tsyringe';
 import model from './schema'
 
-import { ICustomerRepository } from '../../../domain/customer.repository';
+import { ICustomerRepository, IFindAllParameters, IListResponse } from '../../../domain/customer.repository';
 import { Customer } from '../../../domain/customer';
 import { createSetAndUnsetOperators } from '../../../../infra/database/mongoose/utils';
 import { CustomerNotException } from '../../../domain/exceptions/customer-not-found';
@@ -45,8 +45,30 @@ export class CustomerRepository implements ICustomerRepository {
         return customer ? new Customer(customer) : null;
     }
 
-    findAll(id: string): Promise<Customer[]> {
-        throw new Error('Method not implemented.');
-    }
+    async findAll(params: IFindAllParameters): Promise<IListResponse> {
+        const limit = Number(params.limit) ? Number(params.limit) : 10;
+        const page = Number(params.page) ?? 1; 
+        const skip = (page - 1) * limit;
+        const records = await model.find(params.filter ?? {})
+            .skip(skip)
+            .limit(limit + 1)
+            .exec();
 
+        console.log(params);
+        
+        const next = records.length > limit ? page + 1 : null;
+  
+        if (next) {
+            records.pop();
+        }
+
+        return {
+            type: 'customers',
+            url: '/v1/customers',
+            data: records.map(record => new Customer(record)) ,
+            previous: records.length && page > 1 ? page - 1 : null,
+            next,
+            currentPage: page,
+        }
+    }
 }
