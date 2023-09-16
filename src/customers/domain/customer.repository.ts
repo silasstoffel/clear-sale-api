@@ -1,8 +1,5 @@
 import { Customer } from "./customer";
 
-type SortCustomer = {
-    [K in keyof Customer]?: 1 | -1;
-};
 export interface IFindAllParameters {
     filter?: {
         status?: string;
@@ -22,15 +19,10 @@ export interface IListResponse {
     currentPage: number | null;
 }
 
-
 export interface ICustomerRepository {
     create(customer: Customer): Promise<Customer>;
-
     update(id: string, customer: Partial<Customer>): Promise<Customer>;
-
     delete(id: string): Promise<void>;
-
     find(id: string): Promise<Customer | null>;
-
     findAll(params: IFindAllParameters): Promise<IListResponse>;
 }
