@@ -3,6 +3,8 @@ import model from './schema'
 
 import { ICustomerRepository } from '../../../domain/customer.repository';
 import { Customer } from '../../../domain/customer';
+import { createSetAndUnsetOperators } from '../../../../infra/database/mongoose/utils';
+import { CustomerNotException } from '../../../domain/exceptions/customer-not-found';
 
 @injectable()
 export class CustomerRepository implements ICustomerRepository {
@@ -12,8 +14,20 @@ export class CustomerRepository implements ICustomerRepository {
         return new Customer(data);
     }
 
-    async update(id: string, customer: Customer): Promise<Customer> {
-        throw new Error('Method not implemented.');
+    async update(id: string, customer: Partial<Customer>): Promise<Customer> {
+        const { $set, $unset } = createSetAndUnsetOperators(customer);
+
+        const customerUpdated = await model.findOneAndUpdate<Customer>(
+            { id },
+            { $set, $unset },
+            { runValidators: true }
+        ).exec();
+
+        if (!customerUpdated) {
+            throw new CustomerNotException();
+        }
+
+        return new Customer(customerUpdated as Customer);
     }
 
     delete(id: string): Promise<void> {

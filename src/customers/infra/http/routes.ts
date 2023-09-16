@@ -7,7 +7,7 @@ import { LoadCustomerController } from './controllers/load-customer.controller';
 const customerRoute = Router();
 
 customerRoute.post('/', new CreateCustomerController().handle);
-customerRoute.put('/', new UpdateCustomerController().handle);
+customerRoute.put('/:id', new UpdateCustomerController().handle);
 customerRoute.get('/', new ListCustomerController().handle);
 customerRoute.get('/:id', new LoadCustomerController().handle);
 
