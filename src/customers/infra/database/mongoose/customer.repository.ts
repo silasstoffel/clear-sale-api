@@ -4,7 +4,7 @@ import model from './schema'
 import { ICustomerRepository, IFindAllParameters, IListResponse } from '../../../domain/customer.repository';
 import { Customer } from '../../../domain/customer';
 import { createSetAndUnsetOperators } from '../../../../infra/database/mongoose/utils';
-import { CustomerNotException } from '../../../domain/exceptions/customer-not-found';
+import { CustomerNotFoundException } from '../../../domain/exceptions/customer-not-found';
 
 @injectable()
 export class CustomerRepository implements ICustomerRepository {
@@ -24,7 +24,7 @@ export class CustomerRepository implements ICustomerRepository {
         ).exec();
 
         if (!customerUpdated) {
-            throw new CustomerNotException();
+            throw new CustomerNotFoundException();
         }
 
         return new Customer(customerUpdated as Customer);
@@ -36,7 +36,7 @@ export class CustomerRepository implements ICustomerRepository {
         ).exec();
 
         if (!customer) {
-            throw new CustomerNotException();
+            throw new CustomerNotFoundException();
         }
     }
 

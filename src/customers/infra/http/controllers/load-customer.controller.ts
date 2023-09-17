@@ -1,19 +1,16 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { LoadCustomerUseCase } from '../../../use-cases/load-customer.use-case';
+import { ResponseResolver } from './response.resolver';
 
 export class LoadCustomerController {
   async handle(req: Request, res: Response): Promise<Response> {
     const useCase = container.resolve(LoadCustomerUseCase);
-    const customer = await useCase.execute(req.params.id);
-
-    if (!customer) {
-      return res.status(404).json({ 
-        code: 'CUSTOMER_NOT_FOUND', 
-        message: 'Customer not found.'
-      });
+    try {
+      const customer = await useCase.execute(req.params.id);
+      return res.status(200).json(customer);
+    } catch (err: unknown) {
+      return ResponseResolver.resolve(res, err);
     }
-
-    return res.status(200).json(customer);
   }
 }

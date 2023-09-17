@@ -1,5 +1,5 @@
-export class CustomerNotException extends Error {
-    public readonly name = 'CustomerNotException';
+export class CustomerNotFoundException extends Error {
+    public readonly name = 'CustomerNotFoundException';
     public readonly code = 'CUSTOMER_NOT_FOUND';
 
     constructor() {
