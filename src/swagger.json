@@ -1,0 +1,465 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "clear-sale-api",
+        "description": "Clear Sale RESTful API",
+        "version": "1.0.0",
+        "contact": "silasstofel@gmail.com"
+    },
+    "paths": {
+        "/health-check": {
+            "get": {
+                "summary": "Health check",
+                "description": "API health check",
+                "tags": ["health-check"],
+                "responses": {
+                    "200": {
+                        "description": "Health check response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "description": "Message status detail"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
+        "/v1/customers": {
+            "post": {
+                "summary": "Create Customer",
+                "description": "Resource to create a new customer.",
+                "tags": ["customers"],
+                "requestBody": {
+                    "description": "Customer data",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/CreateCustomerInput"
+                        }
+                      }
+                    }
+                  },
+                "responses": {
+                    "201": {
+                        "description": "Customer created successful.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Request conflicted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }                    
+                }
+            },
+            "get": {
+                "summary": "Get a customer by Id",
+                "description": "Resource to update a customer.",
+                "tags": ["customers"],
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "status",
+                        "schema": {
+                          "type": "string",
+                          "enum": ["active", "inactive"],
+                          "example": "active"                          
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "schema": {
+                          "type": "string",
+                          "format": "email"
+                        }
+                    },
+                    {
+                        "name": "document",
+                        "in": "query",
+                        "description": "document",
+                        "schema": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "schema": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 25,
+                          "default": 1,
+                          "example": 1
+                        }
+                      },
+                      {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit of the records per page",
+                        "schema": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 25,
+                          "default": 10,
+                          "example": 10
+                        }
+                      }                    
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customers.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ListCustomerResponse"
+                                }
+                            }
+                        }
+                    }                  
+                }
+            } 
+        },
+        "/v1/customers/{id}": {
+            "put": {
+                "summary": "Update Customer",
+                "description": "Resource to update a customer.",
+                "tags": ["customers"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Customer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Data to update. It's possible update a partial params.",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "$ref": "#/components/schemas/UpdateCustomerInput"
+                        }
+                      }
+                    }
+                  },
+                "responses": {
+                    "200": {
+                        "description": "Customer updated successful.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Validation failed.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Request conflicted.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }                    
+                }
+            },
+            "get": {
+                "summary": "Get a customer by Id",
+                "description": "Resource to update a customer.",
+                "tags": ["customers"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Customer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    }                   
+                }
+            }            
+        }
+    },
+    "definitions": {},
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "ListCustomerResponse": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "customers",
+                    "description": "Resource type"
+                  },
+                  "url": {
+                    "type": "string",
+                    "example": "/v1/customers",
+                    "description": "URL resource"
+                  },
+                  "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/Customer"  
+                    }
+                  },
+                  "previous": {
+                    "type": "integer",
+                    "description": "Previous page number or null if first page"
+                  },
+                  "next": {
+                    "type": "integer",
+                    "description": "Next page number or null if does not have next page"
+                  },
+                  "currentPage": {
+                    "type": "integer",
+                    "example": 1,
+                    "description": "Current page number"
+                  }
+                }
+              },
+            "CreateCustomerInput": {
+              "type": "object",
+              "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name"
+                  },
+                  "document": {
+                    "type": "string",
+                    "description": "Document"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "E-mail address" 
+                  },
+                  "mobilePhone": {
+                    "type": "string",
+                    "description": "Mobile phone number" 
+                  },
+                  "address": {
+                    "$ref": "#/components/schemas/Address"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": ["active", "inactive"],
+                    "default": "active"
+                  }
+              },
+              "required": ["name", "document", "email", "mobilePhone", "address"]
+            },
+            "UpdateCustomerInput": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name"
+                    },
+                    "document": {
+                      "type": "string",
+                      "description": "Document"
+                    },
+                    "email": {
+                      "type": "string",
+                      "description": "E-mail address" 
+                    },
+                    "mobilePhone": {
+                      "type": "string",
+                      "description": "Mobile phone number" 
+                    },
+                    "address": {
+                      "$ref": "#/components/schemas/Address"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["active", "inactive"],
+                      "default": "active"
+                    }
+                }
+            },
+            "AddressInput": {
+              "type": "object",
+              "properties": {
+                "street": {
+                  "type": "string",
+                  "description": "Street name"
+                },
+                "city": {
+                  "type": "string",
+                  "description": "City name"
+                },
+                "state": {
+                  "type": "string",
+                  "description": "State"
+                },
+                "postalCode": {
+                  "type": "string",
+                  "description": "Postal code"
+                },
+                "country": {
+                  "type": "string",
+                  "description": "City name"
+                }
+              },
+              "required": ["street", "city", "state"]
+            },
+            "Customer": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Customer ID",
+                  "readOnly": true
+                },
+                "name": {
+                  "type": "string",
+                  "description": "Name"
+                },
+                "document": {
+                  "type": "string",
+                  "description": "Document"
+                },
+                "email": {
+                  "type": "string",
+                  "description": "E-mail address" 
+                },
+                "mobilePhone": {
+                  "type": "string",
+                  "description": "Mobile phone number" 
+                },
+                "address": {
+                  "$ref": "#/components/schemas/Address"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["active", "inactive"],
+                  "default": "active"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "readOnly": true,
+                  "format": "date-time"  
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "readOnly": true,
+                  "format": "date-time"  
+                }
+              }
+            },
+            "Address": {
+              "type": "object",
+              "properties": {
+                "street": {
+                    "type": "string",
+                    "description": "Street name"
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City name"
+                  },
+                  "state": {
+                    "type": "string",
+                    "description": "State"
+                  },
+                  "postalCode": {
+                    "type": "string",
+                    "description": "Postal code"
+                  },
+                  "country": {
+                    "type": "string",
+                    "description": "City name"
+                  }
+              }
+            },
+            "ValidationError": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+        }
+    }
+}
