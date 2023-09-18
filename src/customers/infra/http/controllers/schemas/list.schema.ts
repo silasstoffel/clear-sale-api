@@ -10,8 +10,8 @@ const filterSchema = yup.object().shape({
 
 const findAllParametersSchema = yup.object().shape({
   filter: filterSchema.default(undefined).optional(),
-  page: yup.number().integer().positive().optional().default(1),
-  limit: yup.number().integer().positive().optional().default(10),
+  page: yup.number().integer().positive().min(1).optional().default(1),
+  limit: yup.number().integer().positive().min(1).max(20).optional().default(10),
 }).noUnknown();
 
 export { findAllParametersSchema, filterSchema }

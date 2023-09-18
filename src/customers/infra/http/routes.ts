@@ -6,7 +6,8 @@ import { LoadCustomerController } from './controllers/load-customer.controller';
 import { DeleteCustomerController } from './controllers/delete-customer.controller';
 import { createCustomerSchema } from './controllers/schemas/create.schema';
 import { updateCustomerSchema } from './controllers/schemas/update.schema';
-import { YupValidatorMiddleware } from './middlewares/yup-validator';
+import { findAllParametersSchema } from './controllers/schemas/list.schema';
+import { YupQueryStringValidatorMiddleware, YupValidatorMiddleware } from './middlewares/yup-validator';
 
 const customerRoute = Router();
 
@@ -22,7 +23,12 @@ customerRoute.put(
     new UpdateCustomerController().handle
 );
 
-customerRoute.get('/', new ListCustomerController().handle);
+customerRoute.get(
+    '/',
+    YupQueryStringValidatorMiddleware(findAllParametersSchema),
+    new ListCustomerController().handle
+);
+
 customerRoute.get('/:id', new LoadCustomerController().handle);
 customerRoute.delete('/:id', new DeleteCustomerController().handle);
 
