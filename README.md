@@ -45,7 +45,7 @@ This project has the propose to create a simple RestFULL API with the CRUD opera
 npm i
 ```
 
-**Helper para linux/macOs (já faz tudo o que precisa):**
+**Helper to up your environment:**
 
 ```shell
 # linux/macOs
@@ -57,9 +57,13 @@ $ sh ./scripts/dev.sh #show real-time log (nodemon)
 [http://localhost:8000/health-check](http://localhost:8000/health-check)
 
 
+## API Reference
+
+[Swagger](http://localhost:8000/api-reference/#/)
+
 ## Tests
 
-Execute os comandos:
+Execute the following commands:
 
 ```shell
 # accessing node container
