@@ -45,7 +45,7 @@ This project has the propose to create a simple RestFULL API with the CRUD opera
 npm i
 ```
 
-**Helper to up your environment:**
+**Helper to setup up your environment:**
 
 ```shell
 # linux/macOs
