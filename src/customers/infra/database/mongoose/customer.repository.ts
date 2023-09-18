@@ -20,7 +20,7 @@ export class CustomerRepository implements ICustomerRepository {
         const customerUpdated = await model.findOneAndUpdate<Customer>(
             { id },
             { $set, $unset },
-            { runValidators: true }
+            { runValidators: true, new: true }
         ).exec();
 
         if (!customerUpdated) {
