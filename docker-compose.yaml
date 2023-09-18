@@ -16,3 +16,19 @@ services:
             - ./.volumes/mongo:/data/db
         networks:
             - default
+
+    api:
+        build:
+            context: .
+            dockerfile: ./infrastructure/docker/dev/node/Dockerfile
+        container_name: 'clear-api'
+        ports:
+            - '8000:8000'
+        volumes:
+            - .:/usr/app
+        links:
+            - database
+        depends_on:
+            - database
+        networks:
+            - default

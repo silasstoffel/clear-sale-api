@@ -7,4 +7,4 @@ fi
 
 docker-compose up -d
 
-docker logs -f clear-api
+docker exec -it clear-api bash
