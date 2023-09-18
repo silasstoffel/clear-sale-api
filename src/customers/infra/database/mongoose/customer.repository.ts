@@ -47,7 +47,7 @@ export class CustomerRepository implements ICustomerRepository {
 
     async findAll(params: IFindAllParameters): Promise<IListResponse> {
         const limit = Number(params.limit) ? Number(params.limit) : 10;
-        const page = Number(params.page) ?? 1; 
+        const page = Number(params.page) || 1; 
         const skip = (page - 1) * limit;
         const records = await model.find(params.filter ?? {})
             .skip(skip)
