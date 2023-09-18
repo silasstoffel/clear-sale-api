@@ -30,6 +30,7 @@ describe("CreateCustomerController", () => {
             expect(response.body).toHaveProperty('id');
             expect(response.body).toHaveProperty('createdAt');
             expect(response.body).toHaveProperty('updatedAt');
+            expect(response.body).toHaveProperty('errors', ['1']);
 
             const result = response.body;
             delete result.id;
